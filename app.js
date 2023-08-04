@@ -20,3 +20,5 @@ app.use("/user", users);
 
 const port = process.env.port || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}..`));
+
+module.exports = app;
