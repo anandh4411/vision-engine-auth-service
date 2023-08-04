@@ -6,7 +6,7 @@ const router = express.Router();
 router.get("/", (req, res) => {
   res.send({
     message:
-      "Hey, this is vision-engine's User Auth Microservice: " +
+      "Hey,  is vision-engine's User Auth Microservice: " +
       process.env.NODE_TEST,
   });
 });
