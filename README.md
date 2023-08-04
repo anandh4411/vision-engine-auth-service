@@ -46,7 +46,7 @@ node app.js
 2. Or use nodemon:
 
 ```bash
-npm i nodemon
+npm i -g nodemon
 nodemon app.js
 ```
 
