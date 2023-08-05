@@ -3,7 +3,8 @@ const express = require("express");
 const loggerMiddleware = require("./middlewares/logger");
 
 const home = require("./routes/home");
-const users = require("./routes/users");
+const user = require("./routes/user");
+const login = require("./routes/login");
 
 module.exports = function (app) {
   app.use(express.json());
@@ -11,5 +12,6 @@ module.exports = function (app) {
   process.env.NODE_ENV === "development" ? app.use(loggerMiddleware) : null;
 
   app.use("/", home);
-  app.use("/user", users);
+  app.use("/user", user);
+  app.use("/login", login);
 };

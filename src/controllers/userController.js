@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const bcrypt = require("bcrypt");
 const { User, validateUser } = require("../models/userModel");
 
 const UserController = {};
@@ -19,17 +20,10 @@ UserController.getAllUsers = async (req, res) => {
 
 // get user by id
 UserController.getUserById = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    return res.status(200).json(user);
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error" });
-  }
+  // find user with req.user._id that we get from auth middleware, form request header - x-auth-token
+  // and exclude password, then send user as response
+  const user = await User.findById(req.user._id).select("-password");
+  res.status(200).send(user);
 };
 
 // create a user
@@ -41,9 +35,15 @@ UserController.createUser = async (req, res) => {
   if (user) return res.status(400).send("User already registered.");
 
   user = new User(_.pick(req.body, ["name", "email", "password"]));
-
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
   await user.save();
-  return res.status(201).json(_.pick(user, ["id", "name", "email"]));
+
+  const token = user.generateAuthToken();
+  return res
+    .header("x-auth-token", token)
+    .status(201)
+    .json(_.pick(user, ["id", "name", "email"]));
 };
 
 module.exports = UserController;
