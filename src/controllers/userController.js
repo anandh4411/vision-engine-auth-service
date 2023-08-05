@@ -44,9 +44,13 @@ UserController.createUser = async (req, res) => {
   user = new User(_.pick(req.body, ["name", "email", "password"]));
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);
-
   await user.save();
-  return res.status(201).json(_.pick(user, ["id", "name", "email"]));
+
+  const token = user.generateAuthToken();
+  return res
+    .header("x-auth-token", token)
+    .status(201)
+    .json(_.pick(user, ["id", "name", "email"]));
 };
 
 module.exports = UserController;

@@ -1,5 +1,5 @@
+require("dotenv").config();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const { User, validateLoginUser } = require("../models/userModel");
 
 const LoginController = {};
@@ -14,7 +14,7 @@ LoginController.loginUser = async (req, res) => {
   const validUser = await bcrypt.compare(req.body.password, user.password);
   if (!validUser) return res.status(400).send("Invalid email or password.");
 
-  const token = jwt.sign({ _id: user._id }, "jwtPrivateKey");
+  const token = user.generateAuthToken();
   return res.status(200).send(token);
 };
 
