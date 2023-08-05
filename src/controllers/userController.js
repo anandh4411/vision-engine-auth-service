@@ -7,6 +7,7 @@ const UserController = {};
 // 1. get all users
 // 2. get user by id
 // 3. create a user
+// 4. update a user
 
 // get all users
 UserController.getAllUsers = async (req, res) => {
