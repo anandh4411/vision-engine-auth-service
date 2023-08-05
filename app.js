@@ -3,12 +3,8 @@ const app = express();
 
 require("dotenv").config();
 require("./config/db")();
+require("./config/config")();
 require("./src/routes")(app);
-
-if (!process.env.jwtPrivateKey) {
-  console.log("FATAL ERROR: jwtPrivateKey is not defined.");
-  process.exit(1);
-}
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}..`));
