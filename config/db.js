@@ -1,6 +1,6 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
-const url = process.env.MONGO_URL + "/vision-engine";
+const url = process.env.MONGO_URL;
 
 module.exports = function connectToDatabase() {
   mongoose

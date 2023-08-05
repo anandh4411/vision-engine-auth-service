@@ -1,9 +1,9 @@
 require("dotenv").config();
 const express = require("express");
-const loggerMiddleware = require("../middlewares/logger");
+const loggerMiddleware = require("./middlewares/logger");
 
-const home = require("./home");
-const users = require("./users");
+const home = require("./routes/home");
+const users = require("./routes/users");
 
 module.exports = function (app) {
   app.use(express.json());
