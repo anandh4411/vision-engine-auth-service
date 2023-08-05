@@ -1,3 +1,4 @@
+const _ = require("lodash");
 const { User, validateUser } = require("../models/userModel");
 
 const UserController = {};
@@ -39,15 +40,10 @@ UserController.createUser = async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("User already registered.");
 
-  const { name, email, password } = req.body;
-  const newUser = new User({
-    name,
-    email,
-    password,
-  });
+  user = new User(_.pick(req.body, ["name", "email", "password"]));
 
-  const savedUser = await newUser.save();
-  return res.status(201).json(savedUser);
+  await user.save();
+  return res.status(201).json(_.pick(user, ["id", "name", "email"]));
 };
 
 module.exports = UserController;
