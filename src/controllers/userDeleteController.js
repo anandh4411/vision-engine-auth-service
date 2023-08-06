@@ -7,7 +7,7 @@ UserDeleteController.deleteUser = async (req, res) => {
   let user = await User.findById(req.user._id);
   if (!user) return res.status(404).send("No data with this id.");
 
-  fs.unlinkSync(user.profilePicPath);
+  if (user.profilePicPath) fs.unlinkSync(user.profilePicPath);
   user = await User.findOneAndDelete({ _id: req.user._id });
   return res.status(200).send(user);
 };
