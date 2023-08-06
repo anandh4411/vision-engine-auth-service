@@ -91,12 +91,11 @@ async function deleteTempUser(email) {
 // dicard create user
 UserCreateController.dicardCreateUser = async (req, res) => {
   const user = await UserTemp.findOne({ email: req.body.email });
-  if (user) {
-    fs.unlinkSync(user.profilePicPath);
-    deleteTempUser(req.body.email);
-    return res.status(200).send("Discarded create user.");
-  }
-  return res.status(404).send("No data with this email.");
+  if (!user) return res.status(404).send("No data with this email.");
+
+  fs.unlinkSync(user.profilePicPath);
+  deleteTempUser(req.body.email);
+  return res.status(200).send("Discarded create user.");
 };
 
 // verify otp
@@ -106,7 +105,7 @@ UserCreateController.verifyOtp = async (req, res) => {
 
   const { email, otp } = req.body;
   let user = await UserTemp.findOne({ email });
-  if (!user) return res.status(400).send("There is no data with given id.");
+  if (!user) return res.status(400).send("There is no data with given email.");
 
   const isOtpValid = user.otp === otp;
   const isOtpExpired =

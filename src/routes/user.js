@@ -5,6 +5,7 @@ const path = require("path");
 const UserController = require("../controllers/userController");
 const UserCreateController = require("../controllers/userCreateController");
 const UserUpdateController = require("../controllers/userUpdateController");
+const UserDeleteController = require("../controllers/userDeleteController");
 
 const router = express.Router();
 
@@ -53,7 +54,7 @@ router.post("/otp/resend", UserCreateController.resendOtp);
 router.post("/discard", UserCreateController.dicardCreateUser);
 
 // delete user
-// router.delete("/delete", UserCreateController.deleteUser);
+router.delete("/delete", auth, UserDeleteController.deleteUser);
 
 // update a user
 router.put("/", auth, UserUpdateController.updateUser);

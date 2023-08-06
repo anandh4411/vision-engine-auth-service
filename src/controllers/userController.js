@@ -21,6 +21,7 @@ UserController.getUserById = async (req, res) => {
   // find user with req.user._id that we get from auth middleware, form request header - x-auth-token
   // and exclude password, then send user as response
   const user = await User.findById(req.user._id).select("-password");
+  if (!user) return res.status(404).send("User doesnt exists.");
   res.status(200).send(user);
   if (user.profilePicPath) {
     const profilePicPath = path.join(
