@@ -46,7 +46,7 @@ router.put(
 );
 
 // delete a user profile pic
-router.put(
+router.delete(
   "/profile/pic/delete",
   auth,
   UserProfilePicDeleteController.deleteUserProfilePic
