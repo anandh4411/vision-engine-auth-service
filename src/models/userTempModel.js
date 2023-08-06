@@ -22,6 +22,9 @@ const userTempSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  profilePicPath: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

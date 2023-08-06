@@ -1,3 +1,4 @@
+const path = require("path");
 const { User } = require("../models/userModel");
 
 const UserController = {};
@@ -21,6 +22,14 @@ UserController.getUserById = async (req, res) => {
   // and exclude password, then send user as response
   const user = await User.findById(req.user._id).select("-password");
   res.status(200).send(user);
+  if (user.profilePicPath) {
+    const profilePicPath = path.join(
+      __dirname,
+      "../../uploads",
+      user.profilePicPath
+    );
+    res.sendFile(profilePicPath);
+  }
 };
 
 module.exports = UserController;

@@ -65,8 +65,16 @@ UserCreateController.createUser = async (req, res) => {
 
   req.body.otp = otpWithTimestamp.otp;
   req.body.otpTimestamp = otpWithTimestamp.timestamp;
+  req.body.profilePicPath = req.file.path;
   user = new UserTemp(
-    _.pick(req.body, ["name", "email", "password", "otp", "otpTimestamp"])
+    _.pick(req.body, [
+      "name",
+      "email",
+      "password",
+      "otp",
+      "otpTimestamp",
+      "profilePicPath",
+    ])
   );
   user.password = await bcrypt.hash(user.password, 10);
   await user.save();
@@ -106,14 +114,13 @@ UserCreateController.verifyOtp = async (req, res) => {
   const tempUserDeleted = deleteTempUser(user.id);
   if (tempUserDeleted) console.log("temp user deleted");
 
-  user = new User(_.pick(user, ["name", "email", "password"]));
+  user = new User(
+    _.pick(user, ["name", "email", "password", "profilePicPath"])
+  );
   await user.save();
 
-  const token = user.generateAuthToken();
-  return res
-    .header("x-auth-token", token)
-    .status(201)
-    .json(_.pick(user, ["id", "name", "email"]));
+  user.token = user.generateAuthToken();
+  return res.status(201).json(_.pick(user, ["id", "name", "email", "token"]));
 };
 
 // resend otp
