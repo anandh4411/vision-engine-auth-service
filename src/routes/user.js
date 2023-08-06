@@ -49,8 +49,11 @@ router.post("/otp/verify", UserCreateController.verifyOtp);
 // create a user - resend otp
 router.post("/otp/resend", UserCreateController.resendOtp);
 
+// discard create user
+router.post("/discard", UserCreateController.dicardCreateUser);
+
 // delete user
-router.delete("/delete", UserCreateController.deleteUser);
+// router.delete("/delete", UserCreateController.deleteUser);
 
 // update a user
 router.put("/", auth, UserUpdateController.updateUser);

@@ -82,17 +82,21 @@ UserCreateController.createUser = async (req, res) => {
   return res.status(200).json(user.email);
 };
 
-async function deleteTempUser(id) {
-  const user = await UserTemp.findOneAndDelete({ _id: id });
+async function deleteTempUser(email) {
+  const user = await UserTemp.findOneAndDelete({ email: email });
   if (user) return true;
   else return false;
 }
 
-// delete user
-UserCreateController.deleteUser = async (req, res) => {
-  const user = await UserTemp.findOneAndDelete({ _id: req.body.id });
-  if (user) return res.status(200).send(_.pick(user, ["id", "name", "email"]));
-  else return res.status(404).send("Cannot find and delete the user.");
+// dicard create user
+UserCreateController.dicardCreateUser = async (req, res) => {
+  const user = await UserTemp.findOne({ email: req.body.email });
+  if (user) {
+    fs.unlinkSync(user.profilePicPath);
+    deleteTempUser(req.body.email);
+    return res.status(200).send("Discarded create user.");
+  }
+  return res.status(404).send("No data with this email.");
 };
 
 // verify otp
@@ -111,8 +115,7 @@ UserCreateController.verifyOtp = async (req, res) => {
   if (!isOtpValid || isOtpExpired)
     return res.status(401).json({ message: "Invalid OTP" });
 
-  const tempUserDeleted = deleteTempUser(user.id);
-  if (tempUserDeleted) console.log("temp user deleted");
+  deleteTempUser(user.email);
 
   user = new User(
     _.pick(user, ["name", "email", "password", "profilePicPath"])
