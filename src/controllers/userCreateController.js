@@ -9,6 +9,18 @@ const { UserTemp } = require("../models/userTempModel");
 
 const UserCreateController = {};
 
+// 1. reusable delete temp user function
+// 2. create user
+// 3. dicard create user
+// 4. verify otp
+
+// reusable delete temp user function
+async function deleteTempUser(email) {
+  const user = await UserTemp.findOneAndDelete({ email: email });
+  if (user) return true;
+  else return false;
+}
+
 // create user
 UserCreateController.createUser = async (req, res) => {
   const { error } = validateUser(req.body);
@@ -50,12 +62,6 @@ UserCreateController.createUser = async (req, res) => {
   return res.status(200).json(user.email);
 };
 
-async function deleteTempUser(email) {
-  const user = await UserTemp.findOneAndDelete({ email: email });
-  if (user) return true;
-  else return false;
-}
-
 // dicard create user
 UserCreateController.dicardCreateUser = async (req, res) => {
   const user = await UserTemp.findOne({ email: req.body.email });
@@ -91,30 +97,6 @@ UserCreateController.verifyOtp = async (req, res) => {
 
   user.token = user.generateAuthToken();
   return res.status(201).json(_.pick(user, ["id", "name", "email", "token"]));
-};
-
-// resend otp
-UserCreateController.resendOtp = async (req, res) => {
-  const email = req.body.email;
-  if (!email) return res.status(400).send("Email is required.");
-
-  let user = await UserTemp.findOne({ email: req.body.email });
-  if (!user) return res.status(404).send("No matching record with email.");
-
-  const otpWithTimestamp = generateOTPWithTimestamp();
-  const otpSend = await sendOTPByEmail(req.body.email, otpWithTimestamp.otp);
-  if (!otpSend)
-    return res
-      .status(422)
-      .send("OTP could not be sent. Please try again later.");
-
-  user = await UserTemp.findByIdAndUpdate(
-    user._id,
-    { otp: otpWithTimestamp.otp, otpTimestamp: otpWithTimestamp.timestamp },
-    { new: true }
-  );
-
-  return res.status(200).json(user.email);
 };
 
 module.exports = UserCreateController;
