@@ -1,21 +1,11 @@
 const _ = require("lodash");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
-const nodemailer = require("nodemailer");
 const otpGenerator = require("otp-generator");
 const { User, validateUser, validateOtp } = require("../models/userModel");
 const { UserTemp } = require("../models/userTempModel");
 
 const UserCreateController = {};
-
-// Create a reusable transporter object using SMTP transport
-const transporter = nodemailer.createTransport({
-  service: "Gmail",
-  auth: {
-    user: "message.cwa@gmail.com",
-    pass: "mmfnjhhafdaouviv",
-  },
-});
 
 // Generate OTP with timestamp
 const generateOTPWithTimestamp = () => {

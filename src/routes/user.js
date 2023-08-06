@@ -1,6 +1,7 @@
-const auth = require("../middlewares/auth");
 const express = require("express");
+const auth = require("../middlewares/auth");
 const multerProfilePicUpload = require("../utils/profile-pic-upload");
+
 const UserController = require("../controllers/userController");
 const UserCreateController = require("../controllers/userCreateController");
 const UserUpdateController = require("../controllers/userUpdateController");
