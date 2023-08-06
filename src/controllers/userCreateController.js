@@ -1,22 +1,13 @@
 const _ = require("lodash");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
+const generateOTPWithTimestamp = require("../utils/generate-otp-timestamp");
+const sendOTPByEmail = require("../utils/send-otp-email");
+
 const { User, validateUser, validateOtp } = require("../models/userModel");
 const { UserTemp } = require("../models/userTempModel");
 
 const UserCreateController = {};
-
-// Send OTP via email
-const sendOTPByEmail = (email, otp) => {
-  const mailOptions = {
-    from: "message.cwa@gmail.com",
-    to: email,
-    subject: "OTP Verification",
-    text: `Your OTP for account verification is: ${otp}`,
-  };
-
-  return transporter.sendMail(mailOptions);
-};
 
 // create user
 UserCreateController.createUser = async (req, res) => {
