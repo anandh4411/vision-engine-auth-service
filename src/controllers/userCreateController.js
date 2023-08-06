@@ -1,23 +1,10 @@
 const _ = require("lodash");
 const fs = require("fs");
 const bcrypt = require("bcrypt");
-const otpGenerator = require("otp-generator");
 const { User, validateUser, validateOtp } = require("../models/userModel");
 const { UserTemp } = require("../models/userTempModel");
 
 const UserCreateController = {};
-
-// Generate OTP with timestamp
-const generateOTPWithTimestamp = () => {
-  const otp = otpGenerator.generate(6, {
-    digits: true,
-    alphabets: false,
-    upperCase: false,
-    specialChars: false,
-  });
-  const timestamp = new Date();
-  return { otp, timestamp };
-};
 
 // Send OTP via email
 const sendOTPByEmail = (email, otp) => {
