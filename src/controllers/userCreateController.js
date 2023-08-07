@@ -28,9 +28,9 @@ UserCreateController.createUser = async (req, res) => {
     fs.unlinkSync(req.file.path);
     return res.status(400).send(error.details[0].message);
   }
-  if (!req.file) {
-    return res.status(400).json({ message: "Profile picture not valid." });
-  }
+  // if (!req.file) {
+  //   return res.status(400).json({ message: "Profile picture not valid." });
+  // }
 
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(409).send("User already registered.");
@@ -45,7 +45,8 @@ UserCreateController.createUser = async (req, res) => {
 
   req.body.otp = otpWithTimestamp.otp;
   req.body.otpTimestamp = otpWithTimestamp.timestamp;
-  req.body.profilePicPath = req.file.path;
+  req.body.profilePicPath = req.file ? req.file.path : null;
+
   user = new UserTemp(
     _.pick(req.body, [
       "name",
