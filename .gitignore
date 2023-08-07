@@ -68,6 +68,8 @@ node_modules/**/*.node
 # Windows Thumbs.db files
 **/Thumbs.db
 
-uploads/
-profile-pic/
-temp/
+uploads/profile-pic/*
+uploads/temp/*
+
+!uploads/profile-pic/.gitkeep
+!uploads/temp/.gitkeep
