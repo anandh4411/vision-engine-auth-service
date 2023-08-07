@@ -67,3 +67,7 @@ node_modules/**/*.node
 
 # Windows Thumbs.db files
 **/Thumbs.db
+
+uploads/
+profile-pic/
+temp/

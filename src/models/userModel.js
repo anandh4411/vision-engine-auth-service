@@ -17,6 +17,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  profilePicPath: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -47,6 +50,25 @@ function validateLoginUser(user) {
   return schema.validate(user);
 }
 
+function validateUpdateUser(user) {
+  const schema = Joi.object({
+    name: Joi.string().min(5).max(50),
+    email: Joi.string().min(5).max(255).email(),
+    password: Joi.string().min(5).max(255),
+  });
+  return schema.validate(user);
+}
+
+function validateOtp(body) {
+  const schema = Joi.object({
+    email: Joi.string().required(),
+    otp: Joi.string().required(),
+  });
+  return schema.validate(body);
+}
+
 exports.User = User;
 exports.validateUser = validateUser;
 exports.validateLoginUser = validateLoginUser;
+exports.validateUpdateUser = validateUpdateUser;
+exports.validateOtp = validateOtp;
