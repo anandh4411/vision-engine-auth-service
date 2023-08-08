@@ -16,7 +16,7 @@ let uploadDirectory = "uploads/profile-pic/";
 
 // for vercel machine
 if (process.env.NODE_ENV == "production")
-  uploadDirectory = path.join(process.cwd(), "uploads/profile-pic/");
+  uploadDirectory = path.join(process.cwd(), "uploads/profile-pic");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
