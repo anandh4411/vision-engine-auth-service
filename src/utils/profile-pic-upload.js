@@ -1,3 +1,4 @@
+require("dotenv").config();
 const multer = require("multer");
 const path = require("path");
 
@@ -11,9 +12,15 @@ const imageFilter = (req, file, cb) => {
 };
 
 // Multer configuration for profile picture upload
+let uploadDirectory = "uploads/profile-pic/";
+
+// for vercel machine
+if (process.env.NODE_ENV == "production")
+  uploadDirectory = path.join(process.cwd(), "uploads/profile-pic/");
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/profile-pic/");
+    cb(null, uploadDirectory);
   },
   filename: (req, file, cb) => {
     const fileName = Date.now() + "-" + file.originalname;

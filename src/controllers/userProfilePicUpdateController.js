@@ -6,7 +6,10 @@ const UserProfilePicUpdateController = {};
 
 UserProfilePicUpdateController.updateUserProfilePic = async (req, res) => {
   let user = await User.findById(req.user._id);
-  if (!user) return res.status(404).send("User doesnt exists.");
+  if (!user) {
+    fs.unlinkSync(req.file.path);
+    return res.status(404).send("User doesnt exists.");
+  }
 
   if (!req.file) return res.status(400).send("Profile picture required.");
 
