@@ -15,7 +15,7 @@ const router = express.Router();
 // create a user - get otp
 router.post(
   "/create",
-  multerProfilePicUpload.single("profile-pic"),
+  multerProfilePicUpload.single("profile_pic"),
   UserCreateController.createUser
 );
 
@@ -27,9 +27,6 @@ router.post("/otp/resend", UserCreateResendOTPController.resendOtp);
 
 // discard create user
 router.post("/discard", UserCreateController.dicardCreateUser);
-
-// get one users
-router.get("/me", auth, UserController.getUserById);
 
 // update a user
 router.put("/update", auth, UserUpdateController.updateUser);
@@ -55,7 +52,10 @@ router.delete("/delete", auth, UserDeleteController.deleteUser);
 // get all users
 router.get("/all", UserController.getAllUsers);
 
+// get one users
+router.get("/me", auth, UserController.getUserById);
+
 // get profile pic
-router.get("/profile/pic/:id", UserController.getProfilePic);
+router.get("/me/pic", auth, UserController.getProfilePic);
 
 module.exports = router;

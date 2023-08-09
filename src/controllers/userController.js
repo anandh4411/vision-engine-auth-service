@@ -17,19 +17,6 @@ UserController.getAllUsers = async (req, res) => {
   }
 };
 
-// get all users
-UserController.getProfilePic = async (req, res) => {
-  let user;
-  try {
-    user = await User.findById(req.params.id).select("profilePicPath");
-  } catch {
-    return res.status(404).send("User not found with this id.");
-  }
-  const imagePath = path.join(process.cwd(), user.profilePicPath);
-  if (!fs.existsSync(imagePath)) return res.status(404).send("Image not found");
-  return res.sendFile(imagePath);
-};
-
 // get user by id
 UserController.getUserById = async (req, res) => {
   // find user with req.user._id that we get from auth middleware, form request header - x-auth-token
@@ -37,6 +24,19 @@ UserController.getUserById = async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
   if (!user) return res.status(404).send("User doesnt exists.");
   return res.status(200).send(user);
+};
+
+// get user pic
+UserController.getProfilePic = async (req, res) => {
+  let user;
+  try {
+    user = await User.findById(req.user._id).select("profilePicPath");
+  } catch {
+    return res.status(404).send("User not found with this id.");
+  }
+  const imagePath = path.join(process.cwd(), user.profilePicPath);
+  if (!fs.existsSync(imagePath)) return res.status(404).send("Image not found");
+  return res.sendFile(imagePath);
 };
 
 module.exports = UserController;

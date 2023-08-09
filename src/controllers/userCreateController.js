@@ -25,7 +25,7 @@ async function deleteTempUser(email) {
 UserCreateController.createUser = async (req, res) => {
   const { error } = validateUser(req.body);
   if (error) {
-    fs.unlinkSync(req.file.path);
+    if (req.file) fs.unlinkSync(req.file.path);
     return res.status(400).send(error.details[0].message);
   }
   // if (!req.file) {
