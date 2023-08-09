@@ -32,7 +32,7 @@ router.post("/discard", UserCreateController.dicardCreateUser);
 router.get("/me", auth, UserController.getUserById);
 
 // update a user
-router.put("/", auth, UserUpdateController.updateUser);
+router.put("/update", auth, UserUpdateController.updateUser);
 
 // update a user profile pic
 router.put(
