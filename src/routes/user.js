@@ -28,9 +28,6 @@ router.post("/otp/resend", UserCreateResendOTPController.resendOtp);
 // discard create user
 router.post("/discard", UserCreateController.dicardCreateUser);
 
-// get all users
-router.get("/all", UserController.getAllUsers);
-
 // get one users
 router.get("/me", auth, UserController.getUserById);
 
@@ -54,5 +51,11 @@ router.delete(
 
 // delete user
 router.delete("/delete", auth, UserDeleteController.deleteUser);
+
+// get all users
+router.get("/all", UserController.getAllUsers);
+
+// get profile pic
+router.get("/profile/pic/:id", UserController.getProfilePic);
 
 module.exports = router;

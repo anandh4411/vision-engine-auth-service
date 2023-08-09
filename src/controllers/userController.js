@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 const { User } = require("../models/userModel");
 
 const UserController = {};
@@ -16,21 +17,26 @@ UserController.getAllUsers = async (req, res) => {
   }
 };
 
+// get all users
+UserController.getProfilePic = async (req, res) => {
+  let user;
+  try {
+    user = await User.findById(req.params.id).select("profilePicPath");
+  } catch {
+    return res.status(404).send("User not found with this id.");
+  }
+  const imagePath = path.join(process.cwd(), user.profilePicPath);
+  if (!fs.existsSync(imagePath)) return res.status(404).send("Image not found");
+  return res.sendFile(imagePath);
+};
+
 // get user by id
 UserController.getUserById = async (req, res) => {
   // find user with req.user._id that we get from auth middleware, form request header - x-auth-token
   // and exclude password, then send user as response
   const user = await User.findById(req.user._id).select("-password");
   if (!user) return res.status(404).send("User doesnt exists.");
-  res.status(200).send(user);
-  if (user.profilePicPath) {
-    const profilePicPath = path.join(
-      __dirname,
-      "../../uploads",
-      user.profilePicPath
-    );
-    res.sendFile(profilePicPath);
-  }
+  return res.status(200).send(user);
 };
 
 module.exports = UserController;
