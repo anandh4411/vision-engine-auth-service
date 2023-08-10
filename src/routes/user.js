@@ -35,7 +35,7 @@ router.put("/update", auth, UserUpdateController.updateUser);
 router.put(
   "/profile/pic/update",
   auth,
-  multerProfilePicUpload.single("profile-pic"),
+  multerProfilePicUpload.single("profile_pic"),
   UserProfilePicUpdateController.updateUserProfilePic
 );
 

@@ -51,6 +51,7 @@ UserCreateController.createUser = async (req, res) => {
     _.pick(req.body, [
       "name",
       "email",
+      "phone",
       "password",
       "otp",
       "otpTimestamp",
@@ -68,7 +69,7 @@ UserCreateController.dicardCreateUser = async (req, res) => {
   const user = await UserTemp.findOne({ email: req.body.email });
   if (!user) return res.status(404).send("No data with this email.");
 
-  fs.unlinkSync(user.profilePicPath);
+  if (user.profilePicPath) fs.unlinkSync(user.profilePicPath);
   deleteTempUser(req.body.email);
   return res.status(200).send("Discarded create user.");
 };
