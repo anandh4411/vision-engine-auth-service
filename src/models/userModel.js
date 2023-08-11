@@ -25,6 +25,9 @@ const userSchema = new mongoose.Schema({
   profilePicPath: {
     type: String,
   },
+  verified: {
+    type: Boolean,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -59,8 +62,7 @@ function validateLoginUser(user) {
 function validateUpdateUser(user) {
   const schema = Joi.object({
     name: Joi.string().min(5).max(50),
-    email: Joi.string().min(5).max(255).email(),
-    phone: Joi.string().min(10).max(14).required(),
+    phone: Joi.string().min(10).max(14),
     password: Joi.string().min(5).max(255),
   });
   return schema.validate(user);

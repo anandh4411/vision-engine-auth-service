@@ -23,6 +23,10 @@ async function deleteTempUser(email) {
 
 // create user
 UserCreateController.createUser = async (req, res) => {
+  let user;
+  if (req.body.email) user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(200).send({ user_exists: true });
+
   const { error } = validateUser(req.body);
   if (error) {
     if (req.file) fs.unlinkSync(req.file.path);
@@ -32,8 +36,11 @@ UserCreateController.createUser = async (req, res) => {
   //   return res.status(400).json({ message: "Profile picture not valid." });
   // }
 
-  let user = await User.findOne({ email: req.body.email });
-  if (user) return res.status(409).send("User already registered.");
+  user = await UserTemp.findOne({ email: req.body.email });
+  if (user) {
+    fs.unlinkSync(user.profilePicPath);
+    await UserTemp.findOneAndDelete({ _id: user.id });
+  }
 
   const otpWithTimestamp = generateOTPWithTimestamp();
 
@@ -88,17 +95,19 @@ UserCreateController.verifyOtp = async (req, res) => {
     Date.now() - user.otpTimestamp.getTime() > 0.5 * 60 * 1000;
 
   if (!isOtpValid || isOtpExpired)
-    return res.status(401).json({ message: "Invalid OTP" });
+    return res.status(200).json({ invalid_otp: true });
 
   deleteTempUser(user.email);
 
   user = new User(
-    _.pick(user, ["name", "email", "password", "profilePicPath"])
+    _.pick(user, ["name", "email", "phone", "password", "profilePicPath"])
   );
   await user.save();
 
   user.token = user.generateAuthToken();
-  return res.status(201).json(_.pick(user, ["id", "name", "email", "token"]));
+  return res
+    .status(201)
+    .json(_.pick(user, ["id", "name", "email", "phone", "token"]));
 };
 
 module.exports = UserCreateController;
