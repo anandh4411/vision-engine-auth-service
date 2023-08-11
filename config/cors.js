@@ -1,4 +1,4 @@
-const whitelist = ["http://localhost:4200", "http://yourdomain.com"];
+const whitelist = ["http://localhost:4200", "https://visionengine.vercel.app"];
 
 module.exports = corsOptions = {
   origin: function (origin, callback) {
