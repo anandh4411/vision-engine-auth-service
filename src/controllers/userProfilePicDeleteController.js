@@ -14,7 +14,7 @@ UserProfilePicDeleteController.deleteUserProfilePic = async (req, res) => {
 
   user = await User.findByIdAndUpdate(
     req.user._id,
-    { $unset: { profilePicPath: 1 } },
+    { $set: { profilePicPath: "" } },
     { new: true }
   );
 
