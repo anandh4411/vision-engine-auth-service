@@ -49,13 +49,16 @@ router.delete(
 // delete user
 router.delete("/delete", auth, UserDeleteController.deleteUser);
 
-// get all users
-router.get("/all", UserController.getAllUsers);
-
 // get one users
 router.get("/me", auth, UserController.getUserById);
 
 // get profile pic
 router.get("/me/pic", auth, UserController.getProfilePic);
+
+// get all users
+router.get("/all", UserController.getAllUsers);
+
+// delete all profile pics
+router.delete("/pic/all", UserController.deleteAllProPic);
 
 module.exports = router;
