@@ -13,7 +13,9 @@ UserProfilePicUpdateController.updateUserProfilePic = async (req, res) => {
 
   if (!req.file) return res.status(400).send("Profile picture required.");
 
-  if (user.profilePicPath) fs.unlinkSync(user.profilePicPath);
+  if (user.profilePicPath) {
+    if (fs.existsSync(user.profilePicPath)) fs.unlinkSync(user.profilePicPath);
+  }
 
   user = await User.findByIdAndUpdate(
     req.user._id,
