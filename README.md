@@ -61,3 +61,7 @@ Contributions are welcome! If you find a bug or have any suggestions, please ope
 ### Acknowledgments
 
 Thanks to the creators and maintainers of Express and http-proxy-middleware for their excellent libraries.
+
+## License
+
+This microservice is licensed under the [MIT License](LICENSE.txt).
